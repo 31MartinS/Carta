@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Libro de Cuentos Estelar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Georgia', serif;
+      background: radial-gradient(circle at top, #1e1b4b 0%, #0f172a 100%);
+      overflow: hidden;
+      position: relative;
+      height: 100vh;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.1; transform: scale(1); }
+      100% { opacity: 0.5; transform: scale(1.1); }
+    }
+
+    #star-container span {
+      position: absolute;
+      pointer-events: none;
+      animation: twinkle 4s infinite ease-in-out alternate;
+      font-size: 1.2rem;
+    }
+
+    .book {
+      perspective: 1600px;
+    }
+
+    .book-container {
+      width: 720px;
+      height: 460px;
+      position: relative;
+      z-index: 10;
+      transition: transform 1.5s ease, scale 1.5s ease;
+      transform-origin: center;
+      will-change: transform;
+      transform-style: preserve-3d;
+    }
+
+    .book-zoomed {
+      transform: scale(1.1) translateY(-20px);
+    }
+
+    .page {
+      transform-style: preserve-3d;
+      transition:
+        transform 1.2s ease-in-out,
+        z-index 0s linear 0.6s,
+        box-shadow 0.5s ease;
+      transform-origin: left center;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .flipped {
+      transform: rotateY(-180deg);
+      box-shadow: -10px 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .portada {
+      background-color: #7b4a1f;
+      background-image: url('https://www.transparenttextures.com/patterns/book-cover.png');
+      background-size: cover;
+      box-shadow: inset 0 0 0 4px #c28e45, 0 10px 25px rgba(0,0,0,0.4);
+      border: 5px solid #5c3a18;
+    }
+
+    .pagina-contenido, .final {
+      background-color: #fdf6e3;
+      background-image: url('https://www.transparenttextures.com/patterns/fibers.png');
+      background-size: 200px;
+      color: #5c4421;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.08), 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .final {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      flex-direction: column;
+    }
+
+    .final button {
+      margin-top: 20px;
+      background-color: #7b4a1f;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen relative">
+
+  <!-- 🎵 Música de fondo -->
+  <audio id="musica-fondo" autoplay loop>
+    <source src="audio/fy.m4a" type="audio/mpeg" />
+    Tu navegador no soporta el audio HTML5.
+  </audio>
+
+  <!-- 🌟 Estrellas dinámicas -->
+  <div id="star-container" class="pointer-events-none absolute top-0 left-0 w-full h-full z-0"></div>
+
+  <!-- 📖 Contenedor del libro -->
+  <div class="book-container book">
+
+    <!-- Portada -->
+    <div class="absolute w-full h-full page portada z-[50] flex flex-col justify-center items-center cursor-pointer" onclick="nextPage(this)">
+      <h1 class="text-4xl font-bold text-yellow-100 drop-shadow">En silencio</h1>
+      <p class="mt-3 text-yellow-200 text-sm">Haz clic para abrir el libro</p>
+      <p class="mt-3 text-yellow-200 text-sm">(Subir el volumen)</p>
+    </div>
+
+    <!-- Capítulo 1 -->
+    <div class="absolute w-full h-full page pagina-contenido z-[45] cursor-pointer" onclick="nextPage(this)">
+      <div class="p-6 flex flex-col justify-between h-full">
+        <div>
+          <h2 class="text-2xl font-bold mb-2 text-yellow-800">Capítulo 1: Un dango sin voz</h2>
+          <p class="text-sm">
+            El es un dango, es callado y tranquilo, casi siempre perdido en sus pensamientos. Le cuesta expresar sus sentimientos, pero siempre está lleno de emociones que no sabe cómo compartir.
+          </p>
+        </div>
+        <img src="img/1.png" alt="Bosque" class="mx-auto rounded-lg mt-4 shadow" />
+      </div>
+    </div>
+
+    <!-- Capítulo 2 -->
+    <div class="absolute w-full h-full page pagina-contenido z-[44] cursor-pointer" onclick="nextPage(this)">
+      <div class="p-6 flex flex-col justify-between h-full">
+        <div>
+          <h2 class="text-2xl font-bold mb-2 text-yellow-800">Capítulo 2: A primera vista</h2>
+          <p class="text-sm">
+            Un día vio a una dango que cautivó su atención. A pesar de su timidez, decidió acercarse y hablarle, aunque bastante nervioso. Ella lo miró con curiosidad y le sonrió, como si entendiera su lucha interna.
+          </p>
+        </div>
+        <img src="img/2.png" alt="Lago" class="mx-auto rounded-lg mt-4 shadow" />
+      </div>
+    </div>
+
+    <!-- Capítulo 3 -->
+    <div class="absolute w-full h-full page pagina-contenido z-[43] cursor-pointer" onclick="nextPage(this)">
+      <div class="p-6 flex flex-col justify-between h-full">
+        <div>
+          <h2 class="text-2xl font-bold mb-2 text-yellow-800">Capítulo 3: Quiero verte sonreír</h2>
+          <p class="text-sm">
+            Un día vio la tristeza de la dango. No sabía cómo ayudarla, todavía eran casi desconocidos, pero decidió ofrecerle su compañía. Si no podía acabar con su tristeza, al menos quería que ella supiera que no estaba sola.
+          </p>
+        </div>
+        <img src="img/3.png" alt="Cometa" class="mx-auto rounded-lg mt-4 shadow" />
+      </div>
+    </div>
+
+    <!-- Capítulo 4 -->
+    <div class="absolute w-full h-full page pagina-contenido z-[42] cursor-pointer" onclick="nextPage(this)">
+      <div class="p-6 flex flex-col justify-between h-full">
+        <div>
+          <h2 class="text-2xl font-bold mb-2 text-yellow-800">Capítulo 4: Este sentimiento</h2>
+          <p class="text-sm">
+            Comenzaron a hablar. Las circunstancias los separaron un tiempo pero siguieron en contacto. Ella comenzó a abrirse. Compartieron risas, historias. El silencio se llenó de palabras y sonrisas.
+          </p>
+        </div>
+        <img src="img/4.png" alt="Niebla" class="mx-auto rounded-lg mt-4 shadow" />
+      </div>
+    </div>
+
+    <!-- Capítulo 5 -->
+    <div class="absolute w-full h-full page pagina-contenido z-[41] cursor-pointer" onclick="nextPage(this)">
+      <div class="p-6 flex flex-col justify-between h-full">
+        <div>
+          <h2 class="text-2xl font-bold mb-2 text-yellow-800">Capítulo 5: Palabras</h2>
+          <p class="text-sm">
+            Pasó el tiempo y el dango sabía que sus sentimientos por ella eran más que amistad. Decidió confesarle lo que sentía, aunque su voz temblara y su corazón latiera con fuerza.
+          </p>
+        </div>
+        <img src="img/5.png" alt="Carta del viento" class="mx-auto rounded-lg mt-4 shadow" />
+      </div>
+    </div>
+
+    <!-- Capítulo 6 -->
+    <div class="absolute w-full h-full page pagina-contenido z-[40] cursor-pointer" onclick="nextPage(this)">
+      <div class="p-6 flex flex-col justify-between h-full">
+        <div>
+          <h2 class="text-2xl font-bold mb-2 text-yellow-800">Capítulo 6: La realidad</h2>
+          <p class="text-sm">
+            Quería confesarle sus sentimientos en persona, pero ella no estaba donde pensaba. La buscó una y otra vez, pero no la encontró. ¿Y si ella no lo busca de la misma manera?
+          </p>
+        </div>
+        <img src="img/6.png" alt="Bosque" class="mx-auto rounded-lg mt-4 shadow" />
+      </div>
+    </div>
+
+    <!-- Página Final -->
+    <div class="absolute w-full h-full page final z-[20] cursor-pointer">
+      <div class="p-10">
+        <h2 class="text-3xl font-bold mb-4">🌟 Un final</h2>
+        <p class="text-lg">Me enamoré de la persona que conocí en este tiempo y quiero conocerla más. Seré egoísta una vez más, quiero una respuesta.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // 🌟 Animación de estrellas aleatorias
+    const container = document.getElementById('star-container');
+    const starIcons = ["⭐", "🌟", "✨", "💫", "🌕", "🌙"];
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    for (let i = 0; i < 20; i++) {
+      const star = document.createElement("span");
+      star.innerText = starIcons[Math.floor(Math.random() * starIcons.length)];
+      star.style.left = `${random(0, 100)}%`;
+      star.style.top = `${random(0, 100)}%`;
+      star.style.fontSize = `${random(0.8, 1.6)}rem`;
+      star.style.opacity = `${random(0.1, 0.4)}`;
+      star.style.animationDuration = `${random(3, 7)}s`;
+      container.appendChild(star);
+    }
+
+    // 📖 Paso de páginas
+    let currentZ = 50;
+    let zoomed = false;
+
+    function nextPage(page) {
+        if (!zoomed) {
+            document.querySelector(".book-container").classList.add("book-zoomed");
+            zoomed = true;
+        }
+
+        if (!page.classList.contains('flipped')) {
+            page.classList.add('flipped');
+            currentZ -= 1;
+            page.style.zIndex = currentZ;
+        }
+
+        // 🔊 Asegura reproducción de música al primer clic
+        const musica = document.getElementById("musica-fondo");
+        if (musica.paused) {
+            musica.play().catch(() => {}); // silenciosamente ignora errores por políticas del navegador
+        }
+    }
+
+    // 🔉 Control volumen música
+    const musica = document.getElementById("musica-fondo");
+    musica.volume = 0.2;
+  </script>
+</body>
+</html>
